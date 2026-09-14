@@ -1,3 +1,5 @@
+ErrorDocument 404 "404 page not found"
+
 
 
 # Begin EnforceSSL lumeral.photo
@@ -8,3 +10,4 @@ RewriteCond %{HTTPS} !=on
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L]
 </IfModule>
 # End EnforceSSL
+
