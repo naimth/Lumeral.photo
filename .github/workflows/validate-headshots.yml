@@ -1,0 +1,36 @@
+name: Validate headshots page
+on:
+  push:
+    branches: [feature/headshots-3d]
+    paths: ['headshots/**', 'index.html', '.github/tests/headshots.cjs', '.github/workflows/validate-headshots.yml']
+  pull_request:
+    paths: ['headshots/**', 'index.html', '.github/tests/headshots.cjs', '.github/workflows/validate-headshots.yml']
+permissions:
+  contents: read
+jobs:
+  browser-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Check JavaScript syntax
+        run: node --check headshots/headshots.js
+      - name: Install isolated browser test dependencies
+        run: |
+          npm install --prefix "$RUNNER_TEMP/headshots-test" --no-audit --no-fund playwright@1.56.1
+          node "$RUNNER_TEMP/headshots-test/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Test gallery and capture desktop and mobile screenshots
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/headshots-test/node_modules/playwright
+          HEADSHOTS_OUTPUT: ${{ runner.temp }}/headshots-review
+        run: node .github/tests/headshots.cjs
+      - name: Save review evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: headshots-review
+          path: ${{ runner.temp }}/headshots-review
+          if-no-files-found: error
+          retention-days: 30
