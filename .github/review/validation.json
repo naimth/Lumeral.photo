@@ -1,0 +1,14 @@
+{
+  "result": "PASS",
+  "tests": [
+    "Desktop: ten images loaded; 3D layout renders without errors.",
+    "Navigation: all ten portraits, wrapping, keyboard arrows, Home, thumbnails.",
+    "Viewer: opens, navigates, closes with Escape, restores focus.",
+    "All-ten grid, full-size grid selection, mouse drag without accidental viewer.",
+    "Responsive: 320, 390, 768, 1024, 1440 px without horizontal page overflow.",
+    "Mobile: real touch-event swipe changes portrait without accidental opening.",
+    "Reduced motion defaults to a still grid.",
+    "No JavaScript: all ten original image links remain accessible.",
+    "Local navigation and asset links return 200; no browser console errors or failed resources."
+  ]
+}
